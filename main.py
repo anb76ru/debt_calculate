@@ -1,10 +1,5 @@
 from helpers import *
 from readme import *
-participant_dict = {"АнтонС": {"Затраты": 0},
-                    "АнтонК": {"Затраты": 1200},
-                    "Андрей": {"Затраты": 1400},
-                    "Кирилл": {"Затраты": 820},
-                    }
 
 
 def calculate(participants):
