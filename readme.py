@@ -1,13 +1,12 @@
 def print_greetings():
     """Печать приветствия"""
 
-    print("*" * 51)
+    print("*" * 51, "\n")
     text_1 = " Данная программа предназначена для разделения "
     text_2 = "совместных затрат между участниками мероприятия"
     print("*", text_1, "*")
     print("*", text_2, "*")
-    print("*" * 51)
-    print()
+    print("*" * 51, "\n")
 
 
 def print_rules():
@@ -26,4 +25,3 @@ def print_rules():
 
     print(text)
     print("=" * 51)
-    print()

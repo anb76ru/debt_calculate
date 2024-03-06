@@ -19,8 +19,7 @@ def calculate(participants):
 
         # Вычислить сумму перевода участника с максимальным долго участнику с минимальным долгом
         transfer_summ = abs(min_debt) if max_debt > abs(min_debt) else max_debt
-        print()
-        print(f"{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}")
+        print(f"\n{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}")
 
         # Обновить суммы долгов
         debt_credit = min_debt + max_debt
@@ -32,7 +31,7 @@ def calculate(participants):
         sorted_names_by_debt = participants
         all_debts = get_all_debts(dict(participants))
     else:
-        print("Все долги рассчитаны")
+        print("\nВсе долги рассчитаны\n")
 
 
 if __name__ == '__main__':
