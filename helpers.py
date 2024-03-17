@@ -15,7 +15,7 @@ def fill_participant_dict(count_names):
 
     for i in range(count_names):
         name, expenses = input("Введите имя и сумму затрат через пробел: ").split()
-        participant_dict[name] = {"Затраты": float(expenses)}
+        participant_dict[name] = {"Затраты": round(float(expenses), 2)}
 
     return participant_dict
 
@@ -37,7 +37,7 @@ def get_average_expenses(participants: dict):
     :param participants: словарь с участниками
     """
 
-    average_expenses = get_total_expenses(participants) / len(participants)
+    average_expenses = round(get_total_expenses(participants) / len(participants), 2)
     print(f'\nСредняя сумма затрат составляет: {average_expenses}\n')
     return average_expenses
 
@@ -49,7 +49,7 @@ def debt_calculate_by_name(participants: dict):
 
     average_expenses = get_average_expenses(participants)
     for name, data in participants.items():
-        data["Долг"] = average_expenses - data.get("Затраты")
+        data["Долг"] = round(average_expenses - data.get("Затраты"), 2)
     return sorted_debt(participants)
 
 
@@ -69,4 +69,4 @@ def get_all_debts(participants):
     :param participants: словарь с участниками
     """
 
-    return [v.get('Долг') for v in participants.values()]
+    return [v.get('Долг') if abs(v.get('Долг')) >= 0.01 else 0 for v in participants.values()]
