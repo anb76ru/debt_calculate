@@ -26,7 +26,9 @@ def get_total_expenses(participants: dict):
     :param participants: словарь с участниками
     """
 
-    return sum([d.get('Затраты') for d in participants.values()])
+    total_expenses = sum([d.get('Затраты') for d in participants.values()])
+    print(f'\nОбщая сумма затрат составляет: {total_expenses}\n')
+    return total_expenses
 
 
 def get_average_expenses(participants: dict):
@@ -35,8 +37,9 @@ def get_average_expenses(participants: dict):
     :param participants: словарь с участниками
     """
 
-    return int(get_total_expenses(participants) / len(participants))
-
+    average_expenses = get_total_expenses(participants) / len(participants)
+    print(f'\nСредняя сумма затрат составляет: {average_expenses}\n')
+    return average_expenses
 
 def debt_calculate_by_name(participants: dict):
     """
