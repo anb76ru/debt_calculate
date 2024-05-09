@@ -34,7 +34,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1
+version = 0.0.1
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -42,7 +42,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy
+requirements = python3,kivy==2.3.0,kivymd==0.104.2,pillow
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -278,7 +278,7 @@ android.sdk = 24
 #android.uses_library =
 
 # (str) Android logcat filters to use
-#android.logcat_filters = *:S python:D
+android.logcat_filters = *:S python:D
 
 # (bool) Android logcat only display log for activity's pid
 #android.logcat_pid_only = False
@@ -291,7 +291,7 @@ android.sdk = 24
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 # In past, was `android.arch` as we weren't supporting builds for multiple archs at the same time.
-android.archs = arm64-v8a
+android.arch = arm64-v8a
 
 # (int) overrides automatic versionCode computation (used in build.gradle)
 # this is not the same as app version and should only be edited if you know what you're doing
