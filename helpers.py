@@ -41,6 +41,7 @@ def get_average_expenses(participants: dict):
     print(f'\nСредняя сумма затрат составляет: {average_expenses}\n')
     return average_expenses
 
+
 def debt_calculate_by_name(participants: dict):
     """
     Рассчитать долг для каждого участника

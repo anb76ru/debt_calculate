@@ -49,10 +49,10 @@ requirements = python3,kivy==2.3.0,kivymd==0.104.2,pillow
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+#presplash.filename = %(source.dir)s/data/logo/unnamed.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/data/money_payroll.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse

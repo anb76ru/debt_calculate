@@ -7,20 +7,19 @@ from kivymd.theming import ThemableBehavior
 from kivymd.uix.list import OneLineIconListItem, MDList
 from debtcalculate import KV
 from kivymd.uix.floatlayout import MDFloatLayout
-from kivymd.icon_definitions import md_icons
 from kivymd.uix.tab import MDTabsBase
-from kivymd.font_definitions import fonts
 from kivy.core.window import WindowBase
-from kivymd.uix.menu import MDDropdownMenu
 from kivy.clock import Clock
-from kivymd.uix.picker import MDDatePicker
-import datetime
-from kivymd.uix.textfield import *
-from kivymd.uix.button import MDRoundFlatButton
+from kivymd.uix.button import MDRoundFlatButton, MDFillRoundFlatButton, MDRectangleFlatButton, MDFloatingActionButton
+
 from kivymd.uix.textfield import MDTextField
 from helpers import *
 from kivymd.uix.label import MDLabel
-
+from kivymd.uix.dialog import MDDialog
+from kivy.core.clipboard import Clipboard
+from kivymd.uix.snackbar import Snackbar
+from kivy.core.window import Window
+from kivy.metrics import dp
 
 class Tab(MDFloatLayout, MDTabsBase):
     pass
@@ -29,21 +28,28 @@ class Tab(MDFloatLayout, MDTabsBase):
 class ContentNavigationDrawer(BoxLayout):
     pass
 
+
 class ItemColor(BoxLayout):
     text = StringProperty()
     color = ListProperty()
 
-class MyButton(MDRoundFlatButton):
+
+class MyButton(MDFillRoundFlatButton):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.md_bg_color = [0.26, 0.40, 0.55, 1]
     width = BoundedNumericProperty(
         88, min=88, max=None, errorhandler=lambda x: 88
     )
     height = NumericProperty(100)
     size = ReferenceListProperty(width, height)
 
+
 class MyTextField(MDTextField):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.hint_text = None if self.focus else self._hint_text
+
 
 class ItemDrawer(OneLineIconListItem):
     icon = StringProperty()
@@ -64,73 +70,32 @@ class DrawerList(ThemableBehavior, MDList):
 
 class DebtCalculate(MDApp):
 
-    title = "Debt Calculate"
+    title = "Сколько должен"
     by_who = 'by anb76ru'
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.screen = Builder.load_string(KV)
-        menu_items = [{"icon": "git", "text": f"Item {i}"} for i in range(2, 11)]
-        self.menu = MDDropdownMenu(
-            caller=self.screen.ids.payment_type,
-            items=menu_items,
-            position="auto",
-            width_mult=4
-        )
-        self.menu.bind(on_release=self.set_item)
-
         self.part_list_widgets = {}
         self.part_list = {}
-
-        #self.date_dialog = MDDatePicker(callback=self.get_data)
-        #self.date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
+        self.info_dialog = None
+        self.info_text = "Расчет не производился"
 
     def set_item(self, instance_menu, instance_menu_item):
         def set_item(iterative):
             self.screen.ids.payment_type.text = instance_menu_item.text
             instance_menu.dismiss()
         Clock.schedule_once(set_item, 0.1)
+
+    def on_start(self):
+        self.screen.ids.box.add_widget(MDLabel(
+            text=self.info_text,
+            halign="center",
+            font_style='H6'
+        ))
     
     def build(self):
         return self.screen
-
-    def on_start(self):
-        icons_item = {
-            "folder": "My files",
-            "account-multiple": "Shared with me",
-            "star": "Starred",
-            "history": "Recent",
-            "checkbox-marked": "Shared with me",
-            "upload": "Upload",
-            "shield-sun": "Dark/Light",
-            'exit-to-app': "Exit",
-        }
-        for icon_name in icons_item.keys():
-            self.root.ids.content_drawer.ids.md_list.add_widget(
-                ItemDrawer(icon=icon_name, text=icons_item[icon_name])
-            )
-
-        # self.screen.ids.table_list.clear_widgets()
-        # participant_count = self.get_count_participant()
-        # for i in range(participant_count):
-        #     row_color = (1, 1, 2, 1)
-        #     # if i%2 != 0:
-        #     #     row_color = (1, 1, 1, 1)
-        #     self.screen.ids.table_list.add_widget(
-        #        ItemColor(color=row_color, text=str(i))
-        #    )
-        # for name_tab in list(md_icons.keys())[10:20]:
-        #     self.root.ids.tabs.add_widget(Tab(text=f'{name_tab}'))
-
-        # for icon_name, name_tab in icons_item.items():
-        #     self.root.ids.tabs.add_widget(
-        #         Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
-        #     )
-
-        # for i in range(5):
-        #     self.root.ids.scroll.add_widget(MDTextField(
-        #                                                 hint_text='Enter expense'))
-        #     self.root.ids.scroll2.add_widget(MDTextField(text='Enter expense'))
 
     def on_tab_switch(
         self, instance_tabs, instance_tab, instance_tab_label, tab_text
@@ -158,18 +123,25 @@ class DebtCalculate(MDApp):
     def get_count_participant(self):
         """Получить количество участников"""
 
-        count_text = self.screen.ids.participant_count.text
-        return int(count_text) if count_text else 0
+        if self.screen.ids.participant_count.text:
+            count = int(self.screen.ids.participant_count.text)
+        elif len(self.part_list_widgets):
+            count = len(self.part_list_widgets)
+        else:
+            count = 0
+        return count
 
     def create_table_to_add_data(self):
         """Создать таблицу для заполнения данных"""
 
         self.screen.ids.table_list.clear_widgets()
         participant_count = self.get_count_participant()
+        if participant_count <= 0 or participant_count >= 100:
+            return
+        if not isinstance(participant_count, int):
+            self.close_app()
         for i in range(1, participant_count+1):
             row_color = (0.98, 0.98, 0.98, 1)
-            # if i%2 != 0:
-            #     row_color = (1, 1, 1, 1)
             widget = ItemColor(color=row_color, text=str(i))
             self.part_list_widgets[f'user_{i}'] = widget
             self.screen.ids.table_list.add_widget(widget)
@@ -208,6 +180,10 @@ class DebtCalculate(MDApp):
         sorted_names_by_debt = debt_calculate_by_name(dict(self.part_list))
         all_debts = get_all_debts(dict(self.part_list))
 
+        self.info_text = "\n"
+        self.info_text += f"\nОбщая сумма: {get_total_expenses(dict(self.part_list))}\n"
+        self.info_text += f"\nСредняя сумма: {get_average_expenses(dict(self.part_list))}\n"
+
         while all_debts != [0] * len(self.part_list):  # Пока все долги не обнуляться
 
             # Получить минимальную и максимальную сумму долга
@@ -215,15 +191,11 @@ class DebtCalculate(MDApp):
 
             # Вычислить сумму перевода участника с максимальным долго участнику с минимальным долгом
             transfer_summ = abs(min_debt) if max_debt > abs(min_debt) else max_debt
-            print(f"\n{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}")
-            self.screen.ids.box.add_widget(MDLabel(
-                text=f"\n{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}",
-                halign="center",
-                font_style='H6'
-            ))
-
+            if transfer_summ == 0:
+                break
+            self.info_text += f"\n{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}\n"
             # Обновить суммы долгов
-            debt_credit = min_debt + max_debt
+            debt_credit = round((min_debt + max_debt), 2)
             sorted_names_by_debt[0][1]['Долг'] = 0 if max_debt > abs(min_debt) else debt_credit
             sorted_names_by_debt[-1][-1]['Долг'] = 0 if max_debt < abs(min_debt) else debt_credit
 
@@ -234,11 +206,89 @@ class DebtCalculate(MDApp):
         else:
             print("\nВсе долги рассчитаны\n")
 
+        self.screen.ids.box.add_widget(MDLabel(
+            text="Итоги расчетов: \n",
+            halign="center",
+            font_style='H6'
+        ))
 
+        self.screen.ids.box.add_widget(MDLabel(
+            text=f"\n{self.info_text}",
+            halign="center",
+            font_style='H6'
+        ))
+        if self.info_text not in ("", "\n", "Расчет не производился"):
+            self.screen.ids.tab2.add_widget(
+                MDFloatingActionButton(
+                    icon='content-copy',
+                    md_bg_color=[0.26, 0.40, 0.55, 1],
+                    text_color=[1, 1, 1, 1],
+                    elevation=0,
+                    on_release=self.copy_result,
+                    pos=[30, 30]
+                )
+            )
+
+        self.screen.ids.tabs.switch_tab(self.screen.ids.tab2.text)
+
+    def show_info(self):
+        """Открыть диалоговое окно с информацией"""
+
+        info_txt = """
+        Как работать с приложением:\n
+        1. На вкладке "Люди" ввести 
+        количество участников
+        
+        2. Нажать кнопку 
+        "Создать таблицу"
+        
+        3. Ввести имена и сумму затрат
+         для каждого участника
+        
+        4. Нажать Рассчитать
+        
+        После нажатия рассчитать,
+        приложение переключится 
+        на вкладку "Расчет"
+        
+        Кнопки "Добавить" и "Удалить" 
+        соответственно 
+        добавляют и удаляют
+        одну строку 
+        для заполнения данных
+        """
+
+        if not self.info_dialog:
+            self.info_dialog = MDDialog(
+                title="Information",
+                text=info_txt,
+                buttons=[
+                    MyButton(text="CLOSE", on_release=self.close_info)
+                ],
+                size_hint=(1, 1)
+            )
+        self.info_dialog.open()
+
+    def close_info(self, inst):
+        """Закрыть окно с информацией"""
+
+        self.info_dialog.dismiss()
+
+    def copy_result(self, inst):
+        """"""
+
+        Clipboard.copy(self.info_text)
+        snackbar = Snackbar(
+            text='Скопировано',
+            snackbar_x="200dp",
+            snackbar_y="25dp",
+            bg_color=[0.09, 0.59, 0.45, 1]
+        )
+        snackbar.open()
 
     @staticmethod
     def close_app():
-        MDApp.get_running_app().on_stop()
+        DebtCalculate.get_running_app().stop()
         WindowBase().close()
 
 

@@ -27,7 +27,7 @@ KV = """
             id: avatar
             size_hint: None, None
             size: "56dp", "56dp"
-            source: "data/logo/kivy-icon-256.png"
+            source: "data/logo/money_payroll.png"
 
     MDLabel:
         text: app.title
@@ -45,7 +45,26 @@ KV = """
 
         DrawerList:
             id: md_list
-
+            
+            ItemDrawer
+                id: info
+                icon: "information-outline"
+                text: "Информация"
+                on_release: app.show_info()
+            
+            ItemDrawer:
+                id: exit
+                icon: "exit-to-app"
+                text: "Выход"
+                on_release: app.close_app()
+    
+    BoxLayout:
+        pos_hint: {"bottom": 1}
+        MDLabel:
+            text: "version 0.0.1"
+            font_style: "Caption"
+            size_hint_y: None
+            height: self.texture_size[1]
 
 
 Screen:
@@ -63,204 +82,104 @@ Screen:
                         title: app.title
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state()]]
-                        md_bg_color: 0, 0, 0, 1
+                        md_bg_color: 0.26, 0.40, 0.55, 1
                     
                     MDTabs:
                         id: tabs
                         on_tab_switch: app.on_tab_switch(*args)
-                        background_color: 0.1, 0.1, 0.1, 1
-                    
+                        background_color: 0.26, 0.40, 0.55, 1
+
                         Tab:
                             id: tab1
                             name: 'tab1'
-                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['calculator-variant']}[/font][/ref] Input"
-                            
+                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-group']}[/font][/ref] Люди"
+
                             BoxLayout:
                                 orientation: 'vertical'
-                                padding: "10dp"
-                                BoxLayout:
-                                    orientation: 'horizontal'
-                                    
-                                    MDIconButton:
-                                        icon: "calendar-month"
-                                    
-                                    MDTextField:
-                                        id: start_date
-                                        hint_text: 'Start date'
-                                        #on_focus: if self.focus: app.date_dialog.open()
-                                        color_mode: 'custom'
-                                        line_color_focus: 0,0,0,1
-                                        text_color: 0,0,0,1
-                                        current_hint_text_color: 0,0,0,1
-                                        text_hint_color: 0,0,1,1
-                                        
-                                BoxLayout:
-                                    orientation: 'horizontal'
-
-                                    MDIconButton:
-                                        icon: "cash"
-                                        
-                                    MDTextField:
-                                        id: loan
-                                        name: 'loan'
-                                        hint_text: 'Loan'
-                                        color_mode: 'custom'
-                                        line_color_focus: 0,0,0,1
-                                        text_color: 0,0,0,1
-                                        current_hint_text_color: 0,0,0,1
-                                        input_filter: 'float'
-                                        helper_text_mode: "on_focus"
-                                
-                                BoxLayout:
-                                    orientation: 'horizontal'
-
-                                    MDIconButton:
-                                        icon: "clock-time-five-outline"
-
-                                    MDTextField:
-                                        id: months
-                                        name: 'months'
-                                        hint_text: 'Months'
-                                        color_mode: 'custom'
-                                        line_color_focus: 0,0,0,1
-                                        text_color: 0,0,0,1
-                                        current_hint_text_color: 0,0,0,1
-                                        input_filter: 'int'
-                                        helper_text_mode: "on_focus"
-                                        
-                                BoxLayout:
-                                    orientation: 'horizontal'
-
-                                    MDIconButton:
-                                        icon: "bank"
-
-                                    MDTextField:
-                                        id: interest
-                                        name: 'interest'
-                                        hint_text: 'Interest'
-                                        color_mode: 'custom'
-                                        line_color_focus: 0,0,0,1
-                                        text_color: 0,0,0,1
-                                        current_hint_text_color: 0,0,0,1
-                                        input_filter: 'float'
-                                        helper_text_mode: "on_focus"
-
-                                    MDTextField:
-                                        id: payment_type
-                                        name: 'payment_type'
-                                        hint_text: 'Payment type'
-                                        text: "annuity"
-                                        on_focus: if self.focus: app.menu.open()
-                                        color_mode: 'custom'
-                                        line_color_focus: 0,0,0,1
-                                        text_color: 0,0,0,1
-                                        current_hint_text_color: 0,0,0,1
-                                
-                                # BoxLayout:
-                                #     MDIconButton:
-                                #         icon: "account-group"
-                                #     MDTextField:
-                                #         id: participant_count
-                                #         name: 'participant count'
-                                #         hint_text: 'participant count'
-                                # 
-                                #     MyButton:
-                                #         text: "create"
-                                #         on_release: app.create_table_to_add_data()
-                                        
-                                        
-                                
-                                BoxLayout:
-                                    spacing: "50"
-                                    padding: 50
-                                    MDList:
-                                        id: scroll
-                                    MDList:
-                                        id: scroll2
-
-                        Tab:
-                            id: tab2
-                            name: 'tab2'
-                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['table-large']}[/font][/ref] Table"
-                            
-                            BoxLayout:
-                                orientation: 'vertical'
-
+                                pos_hint: {"top": 1}
+                                adaptive_height: True
+                                padding: [20, 30, 20, 0]
                                 MDBoxLayout:
-                                    padding: [20, 30, 20, 0]
                                     pos_hint: {"top": 1}
                                     adaptive_height: True
-                                    
                                     MDIconButton:
-                                        icon: "account-group"
+                                        icon: "account-multiple-plus"
+                                        theme_text_color: "Custom"
+                                        text_color: 0.26, 0.40, 0.55, 1
+                                        
                                     MDTextField:
                                         id: participant_count
                                         name: 'participant count'
-                                        hint_text: 'participant count'
-                                
+                                        hint_text: 'Количество'
+                                        helper_text_mode: "on_focus"
+                                        helper_text: 'max=99'
+                                        max_text_length: 2
+                                        line_color_focus: 0.26, 0.40, 0.55, 1
+                                        input_filter: 'int'
                                     MyButton:
-                                        text: "create"
+                                        text: "Создать таблицу"
                                         on_release: app.create_table_to_add_data()
+                                        line_color: 0, 0, 0, 1
                                 
                                 BoxLayout:
                                     orientation: 'vertical'
-                                    padding: [20, 20, 25, 0]
+                                    padding: [0, 20, 25, 80]
                                     adaptive_height: True
 
                                     ScrollView:
                                         MDList:
                                             id: table_list
-                                    
+                            
+                            MDBoxLayout:      
+                                orientation: 'horizontal'
+                                padding: [20, 20, 20, 20]
                                 MDBoxLayout:
                                     orientation: 'horizontal'
-                                    padding: [20, 20, 20, 20]
-                                    
                                     MDBoxLayout:
-                                        # padding: [20, 20, 20, 20]
-
                                         MyButton: 
-                                            text: 'add'
+                                            text: 'Добавить'
                                             on_release: app.add_row()
+    
+                                MDBoxLayout:    
+                                    orientation: 'horizontal'
+                                    MyButton: 
+                                        text: 'Удалить'
+                                        on_release: app.remove_row()
 
-                                    MDBoxLayout:    
-                                        # padding: [20, 20, 20, 20]
+                                MDBoxLayout:    
+                                    # padding: [20, 20, 20, 20]
 
-                                        MyButton: 
-                                            text: 'remove'
-                                            on_release: app.remove_row()
-                                            
-                                    MDBoxLayout:    
-                                        # padding: [20, 20, 20, 20]
-
-                                        MyButton: 
-                                            text: 'calc'
-                                            on_release: app.calc_debt()
+                                    MyButton: 
+                                        text: 'Рассчитать'
+                                        on_release: app.calc_debt()
                                     
                         
-                        Tab:
-                            id: tab1
-                            name: 'tab1'
-                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-areaspline']}[/font][/ref] Graph"
-                            
-                            BoxLayout:
-                                orientation: "vertical"
-                        
-                                ScrollView:
-                        
-                                    MDList:
-                                        id: box
-                            
                         Tab:
                             id: tab2
                             name: 'tab2'
-                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-pie']}[/font][/ref] Chart"
-                        Tab:
-                            id: tab1
-                            name: 'tab1'
-                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['book-open-variant']}[/font][/ref] Sum"
+                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-cash']}[/font][/ref] Расчет"
+                            BoxLayout:
+                                orientation: 'vertical'
+                                pos_hint: {"top": 1}
+                                adaptive_height: True
+                                padding: [20, 30, 20, 20]
+                                MDBoxLayout:
+                                    
+                                    ScrollView:
+                                        MDList:
+                                            id: box
+                                        
+                            # MDBoxLayout:
+                            #     padding: [20, 30, 20, 20]
+                            #     MDFloatingActionButton:
+                            #         icon: 'content-copy'
+                            #         md_bg_color: 0.26, 0.40, 0.55, 1
+                            #         text_color: 1, 1, 1, 1
+                            #         elevation: 0
+                            #         on_release: app.copy_result()
+                                    
+
     
-
-
         MDNavigationDrawer:
             id: nav_drawer
 
@@ -282,15 +201,22 @@ Screen:
     #     halling: "center"   
     
     MDIconButton:
-        icon: "account"    
+        icon: "account"
+        theme_text_color: "Custom"
+        text_color: 0.26, 0.40, 0.55, 1    
+    
     MyTextField:
         id: name
         name: 'name'
         
     MDIconButton:
         icon: "cash-multiple"   
+        theme_text_color: "Custom"
+        text_color: 0.26, 0.40, 0.55, 1
+
     MDTextField:   
         id: expenses
+        input_filter: 'float'
         # name: 'expenses'
         # hint_text: 'expenses'
            
