@@ -1,5 +1,6 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, ListProperty, BoundedNumericProperty, NumericProperty, ReferenceListProperty
 
 from kivymd.app import MDApp
@@ -16,16 +17,20 @@ from kivymd.uix.textfield import MDTextField
 from helpers import *
 from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import MDDialog
-from kivy.core.clipboard import Clipboard
+from kivy.core.clipboard import Clipboard1
 from kivymd.uix.snackbar import Snackbar
 from kivy.core.window import Window
 from kivy.metrics import dp
-
+Window.softinput_mode = 'below_target'
 class Tab(MDFloatLayout, MDTabsBase):
     pass
 
 
 class ContentNavigationDrawer(BoxLayout):
+    pass
+
+
+class InfoContent(ScrollView):
     pass
 
 
@@ -72,6 +77,29 @@ class DebtCalculate(MDApp):
 
     title = "Сколько должен"
     by_who = 'by anb76ru'
+    version = "version 0.0.2"
+    about_txt = """
+        1. На вкладке "Люди" ввести 
+        количество участников
+        
+        2. Нажать кнопку 
+        "Создать таблицу"
+        
+        3. Ввести имена и сумму затрат
+         для каждого участника
+        
+        4. Нажать Рассчитать
+        
+        После нажатия рассчитать,
+        приложение переключится 
+        на вкладку "Расчет"
+        
+        Кнопки "Добавить" и "Удалить" 
+        соответственно 
+        добавляют и удаляют
+        одну строку 
+        для заполнения данных
+        """
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -80,6 +108,7 @@ class DebtCalculate(MDApp):
         self.part_list = {}
         self.info_dialog = None
         self.info_text = "Расчет не производился"
+        Window.softinput_mode = 'below_target'
 
     def set_item(self, instance_menu, instance_menu_item):
         def set_item(iterative):
@@ -144,6 +173,9 @@ class DebtCalculate(MDApp):
             row_color = (0.98, 0.98, 0.98, 1)
             widget = ItemColor(color=row_color, text=str(i))
             self.part_list_widgets[f'user_{i}'] = widget
+            self.screen.ids.table_list.add_widget(widget)
+        for i in range(10):
+            widget = MDLabel(text='\n  ')
             self.screen.ids.table_list.add_widget(widget)
 
     def add_row(self):
@@ -235,7 +267,6 @@ class DebtCalculate(MDApp):
         """Открыть диалоговое окно с информацией"""
 
         info_txt = """
-        Как работать с приложением:\n
         1. На вкладке "Люди" ввести 
         количество участников
         
@@ -260,12 +291,12 @@ class DebtCalculate(MDApp):
 
         if not self.info_dialog:
             self.info_dialog = MDDialog(
-                title="Information",
-                text=info_txt,
+                title="Как работать с приложением:\n",
+                type='custom',
+                content_cls = InfoContent(),
                 buttons=[
                     MyButton(text="CLOSE", on_release=self.close_info)
                 ],
-                size_hint=(1, 1)
             )
         self.info_dialog.open()
 

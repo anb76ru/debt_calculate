@@ -61,7 +61,7 @@ KV = """
     BoxLayout:
         pos_hint: {"bottom": 1}
         MDLabel:
-            text: "version 0.0.1"
+            text: app.version
             font_style: "Caption"
             size_hint_y: None
             height: self.texture_size[1]
@@ -194,11 +194,7 @@ Screen:
             rgba: root.color
         Rectangle:
             size: self.size
-            pos: self.pos
-            
-    # MDLabel:
-    #     text: root.text     
-    #     halling: "center"   
+            pos: self.pos  
     
     MDIconButton:
         icon: "account"
@@ -219,5 +215,20 @@ Screen:
         input_filter: 'float'
         # name: 'expenses'
         # hint_text: 'expenses'
-           
+
+<InfoContent>        
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "420dp"
+
+    ScrollView:
+        
+        MDList:
+            id: info_list
+            MDLabel:
+                pos_hint: {"bottom": 1}
+                text:app.about_txt
+
+
 """
