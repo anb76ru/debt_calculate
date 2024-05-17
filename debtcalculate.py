@@ -86,9 +86,9 @@ Screen:
                     
                     MDTabs:
                         id: tabs
-                        on_tab_switch: app.on_tab_switch(*args)
                         background_color: 0.26, 0.40, 0.55, 1
                         allow_stretch: True
+                        tab_display_mode: 'text'
 
                         Tab:
                             id: tab1
@@ -210,12 +210,12 @@ Screen:
     orientation: "vertical"
     spacing: "12dp"
     size_hint_y: None
-    size_hint_x: 0.8
-    height: "420dp"
+    height: "400dp"
 
     ScrollView:
         
         MDList:
+            padding: [20, 30, 20, 20]
             id: info_list
 
-"""
+"""             

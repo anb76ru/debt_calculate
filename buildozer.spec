@@ -6,7 +6,7 @@
 [app]
 
 # (str) Title of your application
-title = DebtCalculate
+title = Сколько должен
 
 # (str) Package name
 package.name = DebtCalculate
@@ -34,7 +34,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.0.2
+version = 0.0.1
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -49,10 +49,10 @@ requirements = python3,kivy==2.3.0,kivymd==0.104.2,pillow
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/logo/money_payroll-photoaidcom-cropped.png
+presplash.filename = %(source.dir)s/data/logo/loading.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/data/logo/money_payroll.png
+icon.filename = %(source.dir)s/data/logo/money_payroll-photoaidcom-cropped.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
