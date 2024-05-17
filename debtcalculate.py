@@ -27,7 +27,7 @@ KV = """
             id: avatar
             size_hint: None, None
             size: "56dp", "56dp"
-            source: "data/logo/money_payroll.png"
+            source: "data/logo/money_payroll-photoaidcom-cropped.png"
 
     MDLabel:
         text: app.title
@@ -88,11 +88,12 @@ Screen:
                         id: tabs
                         on_tab_switch: app.on_tab_switch(*args)
                         background_color: 0.26, 0.40, 0.55, 1
+                        allow_stretch: True
 
                         Tab:
                             id: tab1
                             name: 'tab1'
-                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-group']}[/font][/ref] Люди"
+                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-group']}[/font][/ref] Участники"
 
                             BoxLayout:
                                 orientation: 'vertical'
@@ -168,17 +169,6 @@ Screen:
                                     ScrollView:
                                         MDList:
                                             id: box
-                                        
-                            # MDBoxLayout:
-                            #     padding: [20, 30, 20, 20]
-                            #     MDFloatingActionButton:
-                            #         icon: 'content-copy'
-                            #         md_bg_color: 0.26, 0.40, 0.55, 1
-                            #         text_color: 1, 1, 1, 1
-                            #         elevation: 0
-                            #         on_release: app.copy_result()
-                                    
-
     
         MDNavigationDrawer:
             id: nav_drawer
@@ -220,15 +210,12 @@ Screen:
     orientation: "vertical"
     spacing: "12dp"
     size_hint_y: None
+    size_hint_x: 0.8
     height: "420dp"
 
     ScrollView:
         
         MDList:
             id: info_list
-            MDLabel:
-                pos_hint: {"bottom": 1}
-                text:app.about_txt
-
 
 """

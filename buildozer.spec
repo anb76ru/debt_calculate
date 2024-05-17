@@ -49,7 +49,7 @@ requirements = python3,kivy==2.3.0,kivymd==0.104.2,pillow
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/logo/unnamed.png
+#presplash.filename = %(source.dir)s/data/logo/money_payroll-photoaidcom-cropped.png
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/data/logo/money_payroll.png

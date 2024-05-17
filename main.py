@@ -17,9 +17,12 @@ from kivymd.uix.textfield import MDTextField
 from helpers import *
 from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import MDDialog
-from kivy.core.clipboard import Clipboard1
+from kivy.core.clipboard import Clipboard
 from kivymd.uix.snackbar import Snackbar
 from kivy.core.window import Window
+from kivymd.uix.list import OneLineAvatarIconListItem
+
+
 from kivy.metrics import dp
 Window.softinput_mode = 'below_target'
 class Tab(MDFloatLayout, MDTabsBase):
@@ -78,28 +81,6 @@ class DebtCalculate(MDApp):
     title = "Сколько должен"
     by_who = 'by anb76ru'
     version = "version 0.0.2"
-    about_txt = """
-        1. На вкладке "Люди" ввести 
-        количество участников
-        
-        2. Нажать кнопку 
-        "Создать таблицу"
-        
-        3. Ввести имена и сумму затрат
-         для каждого участника
-        
-        4. Нажать Рассчитать
-        
-        После нажатия рассчитать,
-        приложение переключится 
-        на вкладку "Расчет"
-        
-        Кнопки "Добавить" и "Удалить" 
-        соответственно 
-        добавляют и удаляют
-        одну строку 
-        для заполнения данных
-        """
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -109,6 +90,14 @@ class DebtCalculate(MDApp):
         self.info_dialog = None
         self.info_text = "Расчет не производился"
         Window.softinput_mode = 'below_target'
+        self.info_dialog = MDDialog(
+            title="Как работать с приложением:\n",
+            type='custom',
+            content_cls=InfoContent(),
+            buttons=[
+                MyButton(text="CLOSE", on_release=self.close_info)
+            ]
+        )
 
     def set_item(self, instance_menu, instance_menu_item):
         def set_item(iterative):
@@ -167,15 +156,10 @@ class DebtCalculate(MDApp):
         participant_count = self.get_count_participant()
         if participant_count <= 0 or participant_count >= 100:
             return
-        if not isinstance(participant_count, int):
-            self.close_app()
         for i in range(1, participant_count+1):
             row_color = (0.98, 0.98, 0.98, 1)
             widget = ItemColor(color=row_color, text=str(i))
             self.part_list_widgets[f'user_{i}'] = widget
-            self.screen.ids.table_list.add_widget(widget)
-        for i in range(10):
-            widget = MDLabel(text='\n  ')
             self.screen.ids.table_list.add_widget(widget)
 
     def add_row(self):
@@ -213,8 +197,26 @@ class DebtCalculate(MDApp):
         all_debts = get_all_debts(dict(self.part_list))
 
         self.info_text = "\n"
-        self.info_text += f"\nОбщая сумма: {get_total_expenses(dict(self.part_list))}\n"
-        self.info_text += f"\nСредняя сумма: {get_average_expenses(dict(self.part_list))}\n"
+        self.screen.ids.box.add_widget(MDLabel(
+            text="Итоги расчетов:",
+            halign="center",
+            font_style='H6'
+        ))
+
+        self.screen.ids.box.add_widget(MDLabel(
+            text=f"Общая сумма: {get_total_expenses(dict(self.part_list))}",
+            halign="center",
+            font_style='H6'
+        ))
+
+        self.screen.ids.box.add_widget(MDLabel(
+            text=f"Средняя сумма: {get_average_expenses(dict(self.part_list))}",
+            halign="center",
+            font_style='H6'
+        ))
+
+        self.info_text += f"Общая сумма: {get_total_expenses(dict(self.part_list))}"
+        self.info_text += f"Средняя сумма: {get_average_expenses(dict(self.part_list))}"
 
         while all_debts != [0] * len(self.part_list):  # Пока все долги не обнуляться
 
@@ -225,6 +227,13 @@ class DebtCalculate(MDApp):
             transfer_summ = abs(min_debt) if max_debt > abs(min_debt) else max_debt
             if transfer_summ == 0:
                 break
+
+            self.screen.ids.box.add_widget(MDLabel(
+                text=f"{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}",
+                halign="center",
+                font_style='H6'
+            ))
+
             self.info_text += f"\n{sorted_names_by_debt[-1][0]} Переводит {sorted_names_by_debt[0][0]} {transfer_summ}\n"
             # Обновить суммы долгов
             debt_credit = round((min_debt + max_debt), 2)
@@ -238,17 +247,6 @@ class DebtCalculate(MDApp):
         else:
             print("\nВсе долги рассчитаны\n")
 
-        self.screen.ids.box.add_widget(MDLabel(
-            text="Итоги расчетов: \n",
-            halign="center",
-            font_style='H6'
-        ))
-
-        self.screen.ids.box.add_widget(MDLabel(
-            text=f"\n{self.info_text}",
-            halign="center",
-            font_style='H6'
-        ))
         if self.info_text not in ("", "\n", "Расчет не производился"):
             self.screen.ids.tab2.add_widget(
                 MDFloatingActionButton(
@@ -266,38 +264,24 @@ class DebtCalculate(MDApp):
     def show_info(self):
         """Открыть диалоговое окно с информацией"""
 
-        info_txt = """
-        1. На вкладке "Люди" ввести 
-        количество участников
-        
-        2. Нажать кнопку 
-        "Создать таблицу"
-        
-        3. Ввести имена и сумму затрат
-         для каждого участника
-        
-        4. Нажать Рассчитать
-        
-        После нажатия рассчитать,
-        приложение переключится 
-        на вкладку "Расчет"
-        
-        Кнопки "Добавить" и "Удалить" 
-        соответственно 
-        добавляют и удаляют
-        одну строку 
-        для заполнения данных
-        """
+        info_text_list = [
+            '1. На вкладке "Участники"\n ввести количество участников',
+            '2. Нажать кнопку "Создать таблицу"',
+            '3. Ввести имена и сумму затрат\n для каждого участника',
+            '4. Нажать Рассчитать',
+            'После нажатия рассчитать, \nприложение переключится на вкладку "Расчет"\n',
+            'Кнопки "Добавить" и "Удалить"\n соответственно добавляют и удаляют\n одну строку для заполнения данных'
 
-        if not self.info_dialog:
-            self.info_dialog = MDDialog(
-                title="Как работать с приложением:\n",
-                type='custom',
-                content_cls = InfoContent(),
-                buttons=[
-                    MyButton(text="CLOSE", on_release=self.close_info)
-                ],
+        ]
+
+        self.info_dialog.content_cls.ids.info_list.clear_widgets()
+        for line in info_text_list:
+            widget = MDLabel(
+                text=line,
+                halign="center",
+                font_style='H6'
             )
+            self.info_dialog.content_cls.ids.info_list.add_widget(widget)
         self.info_dialog.open()
 
     def close_info(self, inst):
