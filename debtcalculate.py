@@ -87,6 +87,7 @@ Screen:
                     MDTabs:
                         id: tabs
                         background_color: 0.26, 0.40, 0.55, 1
+                        tab_hint_x: True
                         allow_stretch: True
                         tab_display_mode: 'text'
 
@@ -101,6 +102,7 @@ Screen:
                                 adaptive_height: True
                                 padding: [20, 30, 20, 0]
                                 MDBoxLayout:
+                                
                                     pos_hint: {"top": 1}
                                     adaptive_height: True
                                     MDIconButton:
