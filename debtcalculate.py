@@ -94,7 +94,7 @@ Screen:
                         Tab:
                             id: tab1
                             name: 'tab1'
-                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-group']}[/font][/ref] Участники"
+                            text: f"[size=18sp][font={fonts[-1]['fn_regular']}]{md_icons['account-group']}[/font][/ref] [size=18sp][/font][/ref] Участники"
 
                             BoxLayout:
                                 orientation: 'vertical'
@@ -160,7 +160,7 @@ Screen:
                         Tab:
                             id: tab2
                             name: 'tab2'
-                            text: f"[size=30][font={fonts[-1]['fn_regular']}]{md_icons['account-cash']}[/font][/ref] Расчет"
+                            text: f"[size=18sp][font={fonts[-1]['fn_regular']}]{md_icons['account-cash']}[/font][/ref] [size=18sp][/font][/ref] Расчет"
                             BoxLayout:
                                 orientation: 'vertical'
                                 pos_hint: {"top": 1}
