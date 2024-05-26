@@ -1,10 +1,14 @@
 KV = """
-#:import md_icons kivymd.icon_definitions.md_icons
+#:import Tab widgets.Tab
+#:import ItemDrawer widgets.ItemDrawer
+#:import MyTextField widgets.MyTextField
 #:import fonts kivymd.font_definitions.fonts
-# Menu item in the DrawerList list.
+#:import md_icons kivymd.icon_definitions.md_icons
+#:import ContentNavigationDrawer widgets.ContentNavigationDrawer
+
+
 <ItemDrawer>:
     theme_text_color: "Custom"
-    on_release: self.parent.set_color_item(self)
 
     IconLeftWidget:
         id: icon
@@ -67,6 +71,50 @@ KV = """
             height: self.texture_size[1]
 
 
+<MemberRow>:
+    size_hint_y: None
+    height: "42dp"
+    canvas:
+        Color:
+            rgba: root.color
+        Rectangle:
+            size: self.size
+            pos: self.pos  
+    
+    MDIconButton:
+        icon: "account"
+        theme_text_color: "Custom"
+        text_color: 0.26, 0.40, 0.55, 1    
+    
+    MyTextField:
+        id: name
+        name: 'name'
+        
+    MDIconButton:
+        icon: "cash-multiple"   
+        theme_text_color: "Custom"
+        text_color: 0.26, 0.40, 0.55, 1
+
+    MDTextField:   
+        id: expenses
+        input_filter: 'float'
+        # name: 'expenses'
+        # hint_text: 'expenses'
+
+
+<InfoContent>        
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "400dp"
+
+    ScrollView:
+        
+        MDList:
+            padding: [20, 30, 20, 20]
+            id: info_list
+
+
 Screen:
 
     MDNavigationLayout:
@@ -119,7 +167,7 @@ Screen:
                                         max_text_length: 2
                                         line_color_focus: 0.26, 0.40, 0.55, 1
                                         input_filter: 'int'
-                                    MyButton:
+                                    FlatButton:
                                         text: "Создать таблицу"
                                         on_release: app.create_table_to_add_data()
                                         line_color: 0, 0, 0, 1
@@ -139,24 +187,23 @@ Screen:
                                 MDBoxLayout:
                                     orientation: 'horizontal'
                                     MDBoxLayout:
-                                        MyButton: 
+                                        FlatButton: 
                                             text: 'Добавить'
                                             on_release: app.add_row()
     
                                 MDBoxLayout:    
                                     orientation: 'horizontal'
-                                    MyButton: 
+                                    FlatButton: 
                                         text: 'Удалить'
                                         on_release: app.remove_row()
 
                                 MDBoxLayout:    
                                     # padding: [20, 20, 20, 20]
 
-                                    MyButton: 
+                                    FlatButton: 
                                         text: 'Рассчитать'
                                         on_release: app.calc_debt()
                                     
-                        
                         Tab:
                             id: tab2
                             name: 'tab2'
@@ -177,47 +224,4 @@ Screen:
 
             ContentNavigationDrawer:
                 id: content_drawer
-
-<ItemColor>:
-    size_hint_y: None
-    height: "42dp"
-    canvas:
-        Color:
-            rgba: root.color
-        Rectangle:
-            size: self.size
-            pos: self.pos  
-    
-    MDIconButton:
-        icon: "account"
-        theme_text_color: "Custom"
-        text_color: 0.26, 0.40, 0.55, 1    
-    
-    MyTextField:
-        id: name
-        name: 'name'
-        
-    MDIconButton:
-        icon: "cash-multiple"   
-        theme_text_color: "Custom"
-        text_color: 0.26, 0.40, 0.55, 1
-
-    MDTextField:   
-        id: expenses
-        input_filter: 'float'
-        # name: 'expenses'
-        # hint_text: 'expenses'
-
-<InfoContent>        
-    orientation: "vertical"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "400dp"
-
-    ScrollView:
-        
-        MDList:
-            padding: [20, 30, 20, 20]
-            id: info_list
-
-"""             
+"""

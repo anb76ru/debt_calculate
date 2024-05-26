@@ -6,7 +6,7 @@
 [app]
 
 # (str) Title of your application
-title = Сколько должен
+title = Расчет долгов
 
 # (str) Package name
 package.name = DebtCalculate
