@@ -18,7 +18,7 @@ class DebtCalculate(MDApp):
 
     title = "Расчет долгов"
     by_who = 'by anb76ru'
-    version = "version 0.0.1"
+    version = "version 0.0.2"
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
