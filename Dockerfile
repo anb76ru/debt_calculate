@@ -24,5 +24,5 @@ RUN git config --global http.version HTTP/1.1
 RUN git clone --branch ${BRANCH} https://github.com/anb76ru/debt_calculate.git
 WORKDIR /anb76ru/debt_calculate
 
-ENTRYPOINT yes | buildozer android debug
-CMD dpl releases --token ${GITHUB_TOKEN} --file "bin/DebtCalculate-${BRANCH}-arm64-v8a-debug.apk" --tag_name ${BRANCH}
+ENTRYPOINT ["yes | buildozer android debug"]
+CMD ["dpl releases", "--token ${GITHUB_TOKEN}", '--file "bin/DebtCalculate-${BRANCH}-arm64-v8a-debug.apk"', "--tag_name ${BRANCH}"]
