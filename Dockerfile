@@ -17,12 +17,11 @@ RUN pip install cython
 RUN gem install \
     dpl --pre \
     bundler
+RUN gem install uri
+RUN gem install net-http
 
-RUN git config --global http.postBuffer 524288000
-RUN git config --global core.compression 0
-RUN git config --global http.version HTTP/1.1
 RUN git clone --branch ${BRANCH} https://github.com/anb76ru/debt_calculate.git
 WORKDIR /anb76ru/debt_calculate
+RUN yes | buildozer android debug
 
-ENTRYPOINT ["yes | buildozer android debug"]
-CMD ["dpl releases", "--token ${GITHUB_TOKEN}", '--file "bin/DebtCalculate-${BRANCH}-arm64-v8a-debug.apk"', "--tag_name ${BRANCH}"]
+ENTRYPOINT dpl releases --token ${GITHUB_TOKEN} --file 'bin/DebtCalculate-${BRANCH}-arm64-v8a-debug.apk' --tag_name ${BRANCH}
