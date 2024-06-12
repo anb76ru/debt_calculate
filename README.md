@@ -13,3 +13,7 @@ mkdir anb76ru
 mv debt_calculate/ anb76ru/
 cd anb76ru/debt_calculate
 dpl releases --token $GITHUB_TOKEN --file "bin/DebtCalculate-0.0.1-arm64-v8a-debug.apk" --tag_name "v.0.0.1"
+
+
+docker run --rm -e GITHUB_TOKEN='123' debt_calculate:0.0.2
+docker build --no-cache --build-arg="BRANCH=rc-0.0.2" -t debt_calculate:0.0.2 .
